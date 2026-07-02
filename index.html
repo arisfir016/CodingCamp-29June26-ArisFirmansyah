@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Produktivitas</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER / NAVBAR ===== -->
+  <header class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-name">ProDash</span>
+    </div>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <span class="theme-icon" id="themeIcon">🌙</span>
+      <span class="theme-label" id="themeLabel">Dark Mode</span>
+    </button>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-container">
+
+    <!-- ROW 1: Greeting + Focus Timer -->
+    <div class="grid-row grid-row--top">
+
+      <!-- GREETING CARD -->
+      <section class="card card--greeting" aria-label="Greeting">
+        <div class="greeting-content">
+          <p class="greeting-time" id="greetingTime">00:00</p>
+          <h1 class="greeting-text" id="greetingText">Selamat Datang!</h1>
+          <p class="greeting-date" id="greetingDate">Memuat tanggal...</p>
+        </div>
+        <div class="greeting-name-form">
+          <label for="nameInput" class="form-label">Nama kamu</label>
+          <div class="input-row">
+            <input
+              type="text"
+              id="nameInput"
+              class="text-input"
+              placeholder="Masukkan namamu..."
+              maxlength="30"
+              autocomplete="off"
+            />
+            <button class="btn btn--primary" id="saveNameBtn">Simpan</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOCUS TIMER CARD -->
+      <section class="card card--timer" aria-label="Focus Timer">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="card-title-icon">🍅</span> Focus Timer
+          </h2>
+        </div>
+
+        <div class="timer-duration-form">
+          <label for="durationInput" class="form-label">Durasi (menit)</label>
+          <div class="input-row">
+            <input
+              type="number"
+              id="durationInput"
+              class="text-input text-input--small"
+              value="25"
+              min="1"
+              max="120"
+            />
+            <button class="btn btn--secondary" id="setDurationBtn">Set</button>
+          </div>
+        </div>
+
+        <div class="timer-display" id="timerDisplay" aria-live="polite">
+          <span id="timerMinutes">25</span>:<span id="timerSeconds">00</span>
+        </div>
+
+        <div class="timer-progress-wrap">
+          <div class="timer-progress-bar" id="timerProgressBar"></div>
+        </div>
+
+        <div class="timer-controls">
+          <button class="btn btn--success" id="startBtn">▶ Start</button>
+          <button class="btn btn--warning" id="stopBtn" disabled>⏸ Stop</button>
+          <button class="btn btn--danger" id="resetBtn">↺ Reset</button>
+        </div>
+
+        <p class="timer-status" id="timerStatus">Siap untuk fokus!</p>
+      </section>
+    </div>
+
+    <!-- ROW 2: To-Do List + Quick Links -->
+    <div class="grid-row grid-row--bottom">
+
+      <!-- TO-DO LIST CARD -->
+      <section class="card card--todo" aria-label="To-Do List">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="card-title-icon">✅</span> To-Do List
+          </h2>
+          <div class="todo-sort-wrap">
+            <button class="btn btn--ghost btn--small" id="sortAlphaBtn" title="Urutkan A-Z">
+              🔤 A-Z
+            </button>
+            <button class="btn btn--ghost btn--small" id="sortStatusBtn" title="Belum selesai di atas">
+              ⬆ Status
+            </button>
+          </div>
+        </div>
+
+        <div class="todo-add-form">
+          <input
+            type="text"
+            id="todoInput"
+            class="text-input"
+            placeholder="Tambah tugas baru..."
+            maxlength="100"
+            autocomplete="off"
+          />
+          <button class="btn btn--primary" id="addTodoBtn">+ Tambah</button>
+        </div>
+
+        <!-- Notification area -->
+        <div class="notification" id="todoNotification" role="alert" aria-live="assertive"></div>
+
+        <ul class="todo-list" id="todoList" aria-label="Daftar tugas">
+          <!-- Items rendered by JS -->
+        </ul>
+
+        <p class="todo-empty" id="todoEmpty">Belum ada tugas. Tambahkan sekarang!</p>
+        <p class="todo-count" id="todoCount"></p>
+      </section>
+
+      <!-- QUICK LINKS CARD -->
+      <section class="card card--links" aria-label="Quick Links">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="card-title-icon">🔗</span> Quick Links
+          </h2>
+        </div>
+
+        <div class="links-add-form">
+          <input
+            type="text"
+            id="linkNameInput"
+            class="text-input"
+            placeholder="Nama situs (mis. Google)"
+            maxlength="30"
+            autocomplete="off"
+          />
+          <input
+            type="url"
+            id="linkUrlInput"
+            class="text-input"
+            placeholder="https://..."
+            autocomplete="off"
+          />
+          <button class="btn btn--primary" id="addLinkBtn">+ Tambah Link</button>
+        </div>
+
+        <div class="links-grid" id="linksGrid">
+          <!-- Items rendered by JS -->
+        </div>
+
+        <p class="links-empty" id="linksEmpty">Belum ada link. Tambahkan situs favoritmu!</p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== EDIT MODAL ===== -->
+  <div class="modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+    <div class="modal">
+      <h3 class="modal-title" id="editModalTitle">Edit Tugas</h3>
+      <input type="text" id="editInput" class="text-input" maxlength="100" />
+      <div class="modal-actions">
+        <button class="btn btn--primary" id="saveEditBtn">Simpan</button>
+        <button class="btn btn--ghost" id="cancelEditBtn">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TIMER DONE NOTIFICATION ===== -->
+  <div class="toast" id="timerToast" role="status" aria-live="polite">
+    🎉 Sesi fokus selesai! Saatnya istirahat.
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
